@@ -1,7 +1,12 @@
 {% if latest_question_list %}
     <ul>
         {% for question in latest_question_list %}
-            <li><a href="/polls/{{ question.id }}/"></a>{{ question.question_text }}</li>
+            <!-- 템플릿에서 하드코딩된 url을 제거하자. 앱은 탈착식이니까! -->
+            <!-- detail은 urls.py에서 name='detail' 이거랑 매칭된다. -->
+            <!-- detail 경로가 달라지면, template을 수정하는게 아니라 urls.py 만 수정하면 된다. 좋은 기능인듯. -->
+            
+            <!-- 여기서 한발 더 나아가 urls.py에 app_name을 추가해서 다른 앱과 구분하면 완벽해진다 -->
+            <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
         {% endfor %}
     </ul>
 {% else %}

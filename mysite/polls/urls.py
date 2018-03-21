@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+app_name = 'polls' # 앱의 이름공간을 설정해준다. 다른 앱과 구분하기 위해.
 urlpatterns = [
     # ex : /polls/
     path('', views.index, name='index'),
