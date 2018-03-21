@@ -31,12 +31,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.admin', # 관리용 사이트
+    'django.contrib.auth', # 인증 시스템
+    'django.contrib.contenttypes', # 컨텐츠 타입을 위한 프레임워크
+    'django.contrib.sessions', # 세션 프레임워크
+    'django.contrib.messages', # 메세징 프레임워크
+    'django.contrib.staticfiles', # 정적파일을 관리하는 프레임워크
+    'polls.apps.PollsConfig' # 내가 만든 앱. 이런식으로 앱은 탈착이 가능하다.
 ]
 
 MIDDLEWARE = [
@@ -103,9 +104,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
