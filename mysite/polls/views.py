@@ -2,6 +2,8 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
+from django.utils import timezone
+from django.db.models import Count
 
 from .models import Question, Choice
 
@@ -13,15 +15,24 @@ from .models import Question, Choice
 # 컨텍스트 변수도 디폴트는 question_list지만 context_object_name을 명시적으로 써주면 그걸로 대체된다.
 # 복잡한 화면에서는 힘들수도 있겠는데...?
 class IndexView(generic.ListView):
-    tempalate_name = 'polls/index.html'
+    template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
 
     def get_queryset(self):
-        return Question.objects.order_by('-pub_date')[:5]
+        # choice_set 있는 애들만 보여준다.
+        return Question.objects.annotate(choice_count=Count('choice')).filter(
+            # 미래 날짜의 게시글을 가져오기 않기 위해 필터 추가
+            pub_date__lte = timezone.now(),
+            choice_count__gt = 0
+        ).order_by('-pub_date')[:5]
 
 class DetailView(generic.DetailView):
     model = Question
     template_name = 'polls/detail.html'
+
+    # 미래의 포스트는 나오지 않도록 함수를 추가해준다.
+    def get_queryset(self):
+        return Question.objects.filter(pub_date__lte=timezone.now())
 
 class ResultsView(generic.DetailView):
     model = Question
