@@ -1,32 +1,31 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views import generic
+
 from .models import Question, Choice
 
 # Create your views here.
-def index(request) :
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    # 하드코딩 대신 템플릿 사용하자
-    context = {
-        'latest_question_list' : latest_question_list,
-    }
-    # render 함수 인수는 request, template이름, context 객체를 넘겨주면 된다!
-    return render(request, 'polls/index.html', context)
+# 기존 index, detail, results를 제네릭 뷰로 교체
+# 자바 제네릭처럼.. 페이지의 형태를 명시해주는 거라고 보면 될것 같다.
+# ListView, DetailView 상속만 해주면, 자동으로 매핑까지 알아서 해주고 편하긴 하네
+# 제너릭 뷰 사용시 템플릿 디폴트는 <app name>/<model name>_list.html, <app name>/<model name>_detail.html 이런식인데 아래처럼 명시해서 쓸 수 있다.
+# 컨텍스트 변수도 디폴트는 question_list지만 context_object_name을 명시적으로 써주면 그걸로 대체된다.
+# 복잡한 화면에서는 힘들수도 있겠는데...?
+class IndexView(generic.ListView):
+    tempalate_name = 'polls/index.html'
+    context_object_name = 'latest_question_list'
 
-def detail(request, question_id) :
-    # try:
-    #     question = Question.objects.get(pk=question_id)
-    # except Question.DoesNotExist :
-    #     raise Http404('Question 없음!')
+    def get_queryset(self):
+        return Question.objects.order_by('-pub_date')[:5]
 
-    # 지름길 사용하자 get_object_or_404()
-    # 리스트인 경우엔 get_list_or_404()를 쓰면 된다.
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/detail.html', {'question':question})
+class DetailView(generic.DetailView):
+    model = Question
+    template_name = 'polls/detail.html'
 
-def results(request, question_id) :
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/results.html', {'question':question})
+class ResultsView(generic.DetailView):
+    model = Question
+    template_name = 'polls/results.html'
 
 def vote(request, question_id) :
     question = get_object_or_404(Question, pk=question_id)

@@ -3,13 +3,10 @@ from . import views
 
 app_name = 'polls' # 앱의 이름공간을 설정해준다. 다른 앱과 구분하기 위해.
 urlpatterns = [
-    # ex : /polls/
-    path('', views.index, name='index'),
-    # ex : /polls/5/
-    path('<int:question_id>/', views.detail, name='detail'),
-    # ex : /polls/5/results/
-    path('<int:question_id>/results/', views.results, name='results'),
-    # ex : /polls/5/vote/
+    # 제너릭 뷰 사용. detail, results, index 비슷한 페이지들 중복되는 부분 제거하고 함께 쓰자.
+    path('', views.IndexView.as_view(), name='index'),
+    path('<int:pk>/', views.DetailView.as_view(), name='detail'),
+    path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
     path('<int:question_id>/vote/', views.vote, name='vote'),
 ]
 
