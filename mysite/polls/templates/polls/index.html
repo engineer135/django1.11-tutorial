@@ -1,3 +1,9 @@
+<!-- 이 태그는 정적 파일의 절대 url을 생성한다. -->
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}"/>
+
+
 {% if latest_question_list %}
     <ul>
         {% for question in latest_question_list %}
