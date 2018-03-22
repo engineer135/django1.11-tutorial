@@ -52,10 +52,19 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mysite.urls'
 
+# 프로젝트 템플릿 커스터마이징
+# 아래 dirs에 새로 만든 templates 폴더를 추가하고, 그 안에 커스터마이징할 파일을 복사해온다.
+# django/contrib/admin/templates 폴더에서 복사해오면 된다.
+# 장고 소스 파일 위치를 알고 싶다면 $ python -c "import django; print(django.__path__)" 실행
+# DIR이 비어있을때 어떻게 템플릿을 가져왔을까? 그건 APP+_DIRS 값이 True라서
+# Django는 각 어플리케이션 패키지 내에서 templates/ 서브 디렉토리를 자동으로 찾아서 대체하게 됩니다. (django.contrib.admin이 어플리케이션 임을 잊지 마십시오.)
+# 투표 어플리케이션은 복잡하지 않으며 사용자 정의 admin 템플릿이 필요하지 않습니다. 
+# 그러나 Django의 표준 admin 템플릿을 좀더 정교하게 필요에 맞게 수정 할 경우 프로젝트 템플릿 대신 어플리케이션의 템플릿을 수정하는 것이 더 현명합니다. 
+# 그렇게 하면 다른 새 프로젝트에 투표 애플리케이션을 포함시킬 수 있고, 필요할때는 커스텀 템플릿을 찾을수 있습니다.
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR), 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
